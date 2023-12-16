@@ -1,0 +1,30 @@
+{
+  "name": "my-navigator",
+  "version": "1.0.0",
+  "description": "Access your recently visited web pages within a website",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/archeun/my-navigator.git"
+  },
+  "keywords": [
+    "chrome",
+    "chrome-extension",
+    "archeun"
+  ],
+  "author": "Aruna Tebel",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/archeun/my-navigator/issues"
+  },
+  "homepage": "https://github.com/archeun/my-navigator#readme",
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "moment": "^2.29.4",
+    "mustache": "^4.2.0",
+    "tailwindcss": "^3.3.6"
+  }
+}

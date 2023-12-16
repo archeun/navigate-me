@@ -7,11 +7,11 @@
         "default_popup": "index.html"
     },
     "background": {
-        "service_worker": "scripts/background.js"
+        "service_worker": "scripts/dist/background.js"
     },
     "content_scripts": [
         {
-            "js": ["scripts/contents.js"],
+            "js": ["scripts/dist/contents.js"],
             "matches": ["<all_urls>"]
         }
     ],
@@ -23,6 +23,7 @@
     },
     "permissions": [
         "storage",
-        "activeTab"
+        "activeTab",
+        "webNavigation"
     ]
 }
