@@ -28,6 +28,7 @@ chrome.storage.local.get(["pages.visited"]).then((result) => {
 				const urlData = pagesVisited[url.host][u];
 				return {
 					url: u,
+					dt: urlData.dt,
 					datetimeDisplay: moment.unix(urlData.dt).fromNow(),
 					datetime: moment.unix(urlData.dt).format('MMMM Do YYYY, h:mm:ss a'),
 					title: urlData.t,
@@ -35,6 +36,7 @@ chrome.storage.local.get(["pages.visited"]).then((result) => {
 					urlPath: urlData.p,
 				};
 			});
+			visitedUrls = visitedUrls.sort((a, b) => b.dt - a.dt);
 		}
 		document.getElementById("title").innerHTML = url.host;
 		document.getElementById("visited-urls").innerHTML = Mustache.render(
