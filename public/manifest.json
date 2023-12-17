@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Navigate Me",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Access your recently visited web pages within a website",
   "icons": {
     "16": "icons/icon-16.png",
