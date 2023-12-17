@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Access your recently visited web pages within a website",
   "main": "tailwind.config.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/archeun/my-navigator.git"
@@ -21,10 +18,27 @@
     "url": "https://github.com/archeun/my-navigator/issues"
   },
   "homepage": "https://github.com/archeun/my-navigator#readme",
+  "scripts": {
+    "watch": "webpack --mode=development --watch --config config/webpack.config.js",
+    "build": "webpack --mode=production --config config/webpack.config.js",
+    "pack": "node pack.js",
+    "repack": "npm run build && npm run pack",
+    "format": "prettier --write --ignore-unknown \"{config,public,src}/**/*.{html,css,js,ts,json}\""
+  },
   "dependencies": {
-    "browserify": "^17.0.0",
     "moment": "^2.29.4",
-    "mustache": "^4.2.0",
+    "mustache": "^4.2.0"
+  },
+  "devDependencies": {
+    "adm-zip": "^0.5.10",
+    "copy-webpack-plugin": "^10.2.4",
+    "css-loader": "^6.8.1",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.7.6",
+    "prettier": "^2.8.8",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-merge": "^5.10.0",
     "tailwindcss": "^3.3.6"
   }
 }
