@@ -1,11 +1,11 @@
 # Navigate Me
-> A chrome extension to access your recently visited web pages within a website.
+> Navigate me will keep track of your page visits inside a website. It improves your productivity by helping you quickly find your history of page navigations within the website.
 
 This extension will keep track of the web pages you visit within a website. It improves your productivity by allowing you to see the history of all the web pages you visited in a website in one place. 
 
 For eg: when surfing a documentation website, you might visit a number of pages to read about different topics. After some time, you need to go back to a previous article but does not remember it's name/link. **Navigate Me** will help you quickly pick or search it from the listed URLs within the extension. 
 
-This extension has an improved user experience than the standard Chrome History since it allows you to see all the visited pages while you are in the web site itself. It provides simple yet powerful search functionality and a sensible configurations.
+This extension has an improved user experience than the standard Chrome History since it allows you to see all the visited pages while you are in the web site itself. It provides simple yet powerful search functionality and sensible configurations.
 
 **Navigate Me** extension stores data locally so you don't have to worry about privacy or data usage. It is minimalistic and has less clutter. 
 
