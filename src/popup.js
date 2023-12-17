@@ -15,7 +15,7 @@ import './popup.css';
 <div class="min-w-0 gap-x-4">
 	<div class="min-w-0 flex-auto w-full">
 		<p class="text-sm font-semibold leading-5 truncate">
-			<a class="text-primary" href="{{url}}" target="_blank" title="{{title}}">{{title}}</a>
+			<a class="text-primary visited-link" href="{{url}}" title="{{title}}">{{title}}</a>
 		</p>
 		<p class="text-xs font-light leading-5 truncate">
 			{{urlPath}}
@@ -75,6 +75,21 @@ import './popup.css';
     document.getElementById('visited-urls').innerHTML = Mustache.render(
       listItemTemplate,
       { visitedUrls: urls }
+    );
+
+    registerLinkClickEvents();
+  }
+
+  function registerLinkClickEvents() {
+    Object.values(document.getElementsByClassName('visited-link')).forEach(
+      (el) => {
+        el.addEventListener('click', (e) => {
+          const url = el.getAttribute('href');
+          if (!e.ctrlKey) {
+            chrome.tabs.update({ active: true, url });
+          }
+        });
+      }
     );
   }
 
