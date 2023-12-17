@@ -9,6 +9,10 @@ This extension has an improved user experience than the standard Chrome History 
 
 **Navigate Me** extension stores data locally so you don't have to worry about privacy or data usage. It is minimalistic and has less clutter. 
 
+## Screenshots
+
+![screenshot-5](https://github.com/archeun/navigate-me/assets/5432727/85c09a66-05d5-4210-8d81-308e89c365aa) ![github](https://github.com/archeun/navigate-me/assets/5432727/4fc3bf89-9d49-4ed2-ad07-d3d5995cb569) ![mdn-docs](https://github.com/archeun/navigate-me/assets/5432727/906b35c8-ee60-4f6e-8459-2f6fe0c9ac89) ![settings-page](https://github.com/archeun/navigate-me/assets/5432727/b758a219-5950-4521-909e-b8c4119547e2)
+
 ## Features
 
 - Records the web pages you visit within a website
