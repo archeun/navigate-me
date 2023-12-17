@@ -1,7 +1,7 @@
 {
-  "name": "my-navigator",
+  "name": "navigate-me",
   "version": "1.0.0",
-  "description": "Access your recently visited web pages within a website",
+  "description": "A chrome extension to access your recently visited web pages within a website",
   "main": "tailwind.config.js",
   "repository": {
     "type": "git",

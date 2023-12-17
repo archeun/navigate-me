@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "My Navigator",
+  "name": "Navigate Me",
   "version": "0.1.0",
   "description": "Access your recently visited web pages within a website",
   "icons": {
@@ -13,7 +13,7 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "My Navigator",
+    "default_title": "Navigate Me",
     "default_popup": "popup.html"
   },
   "permissions": ["storage", "activeTab", "webNavigation"],
