@@ -5,11 +5,13 @@ import './popup.css';
 (function () {
   const Mustache = require('mustache');
   const moment = require('moment');
-
+  const consts = require('./constants');
+  const storageKey = consts.storage.keys.VISITED_URLS;
+  const settingsStorageKey = consts.storage.keys.SETTINGS;
   let visitedUrls = [];
 
   const listItemTemplate = `{{#visitedUrls}}
-<li class="border-l-secondary border-l-4 justify-between gap-x-1 p-2 mb-3 shadow-md">
+<li class="bg-white border-l-secondary border-l-4 justify-between gap-x-1 p-2 mb-3 shadow-md">
 <div class="min-w-0 gap-x-4">
 	<div class="min-w-0 flex-auto w-full">
 		<p class="text-sm font-semibold leading-5 truncate">
@@ -30,8 +32,8 @@ import './popup.css';
 </li>
 {{/visitedUrls}}`;
 
-  chrome.storage.local.get(['pages.visited']).then((result) => {
-    let pagesVisited = result['pages.visited'];
+  chrome.storage.local.get([storageKey]).then((result) => {
+    let pagesVisited = result[storageKey];
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const url = new URL(tabs[0].url);
       document.getElementById('title').innerHTML = url.host;
@@ -93,9 +95,52 @@ import './popup.css';
     });
   }
 
+  async function getCurrentUrl() {
+    const currentTab = (
+      await chrome.tabs.query({ active: true, lastFocusedWindow: true })
+    )[0];
+    return new URL(currentTab.url);
+  }
+
+  const settingsTab = {
+    form: {
+      eventListeners: {
+        [settingsStorageKey.RECORD_NAVIGATIONS]: async (event) => {
+          await settingsTab.save({
+            [settingsStorageKey.RECORD_NAVIGATIONS]: event.target.checked,
+          });
+        },
+      },
+      init: async () => {
+        const settings = (
+          await chrome.storage.local.get([settingsStorageKey.MAIN])
+        )[settingsStorageKey.MAIN];
+        const url = await getCurrentUrl();
+        document.getElementById(settingsStorageKey.RECORD_NAVIGATIONS).checked =
+          settings[url.host][settingsStorageKey.RECORD_NAVIGATIONS];
+      },
+    },
+    save: async (updatedSettingsForHost) => {
+      const storedSettings = (
+        await chrome.storage.local.get([settingsStorageKey.MAIN])
+      )[settingsStorageKey.MAIN];
+
+      const url = await getCurrentUrl();
+      let currentSettingsForHost = storedSettings[url.host];
+      let newSettingsForHost = {
+        ...currentSettingsForHost,
+        ...updatedSettingsForHost,
+      };
+      storedSettings[url.host] = newSettingsForHost;
+      await chrome.storage.local.set({
+        [settingsStorageKey.MAIN]: storedSettings,
+      });
+    },
+  };
+
   document
     .getElementById('search-text-input')
-    .addEventListener('keyup', function (el, event) {
+    .addEventListener('keyup', function (event, el) {
       populateList(
         visitedUrls.filter((visitedUrl) => {
           return visitedUrl.title
@@ -107,14 +152,14 @@ import './popup.css';
 
   document
     .getElementById('delete-all-btn')
-    .addEventListener('click', function (el, event) {
+    .addEventListener('click', function (event, el) {
       toggleAllDeleteCheckboxes('check');
       toggleDeleteConfirmationSection('show');
     });
 
   document
     .getElementById('delete-selected-btn')
-    .addEventListener('click', function (el, event) {
+    .addEventListener('click', function (event, el) {
       if (getSelectedUrlsToDelete().length > 0) {
         toggleDeleteConfirmationSection('show');
       }
@@ -122,30 +167,69 @@ import './popup.css';
 
   document
     .getElementById('cancel-delete-btn')
-    .addEventListener('click', function (el, event) {
+    .addEventListener('click', function (event, el) {
       toggleAllDeleteCheckboxes();
       toggleDeleteConfirmationSection();
     });
 
   document
     .getElementById('confirm-delete-btn')
-    .addEventListener('click', function (el, event) {
+    .addEventListener('click', function (event, el) {
       const urlsToDelete = getSelectedUrlsToDelete();
-      chrome.storage.local.get(['pages.visited']).then((result) => {
-        let pagesVisited = result['pages.visited'];
+      chrome.storage.local.get([storageKey]).then((result) => {
+        let pagesVisited = result[storageKey];
         chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
           let url = new URL(tabs[0].url);
           urlsToDelete.forEach((u) => {
             delete pagesVisited[url.host][u];
           });
-          chrome.storage.local
-            .set({ 'pages.visited': pagesVisited })
-            .then(() => {
-              generateVisitedUrls(pagesVisited, url.host);
-              populateList(visitedUrls);
-              toggleDeleteConfirmationSection();
-            });
+          chrome.storage.local.set({ [storageKey]: pagesVisited }).then(() => {
+            generateVisitedUrls(pagesVisited, url.host);
+            populateList(visitedUrls);
+            toggleDeleteConfirmationSection();
+          });
         });
       });
     });
+
+  Object.values(document.getElementsByClassName('tablinks')).forEach((el) => {
+    el.addEventListener('click', async (event, element) => {
+      const elementName = el.getAttribute('name');
+      let i, tabcontent, tablinks;
+
+      tabcontent = document.getElementsByClassName('tabcontent');
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = 'none';
+      }
+
+      tablinks = document.getElementsByClassName('tablinks');
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(
+          ' text-primary font-bold',
+          ''
+        );
+      }
+
+      document.getElementById(`${elementName}-tab`).style.display = 'block';
+      event.currentTarget.className += ' text-primary font-bold';
+      await settingsTab.form.init();
+    });
+  });
+
+  Object.values(document.getElementsByClassName('settings-input')).forEach(
+    (el) => {
+      const elementName = el.getAttribute('name');
+      let eventName;
+      let eventListener = settingsTab.form.eventListeners[elementName];
+      switch (elementName) {
+        case 'record-navigations-check':
+          eventName = 'change';
+          break;
+
+        default:
+          break;
+      }
+      el.addEventListener(eventName, eventListener);
+    }
+  );
 })();
