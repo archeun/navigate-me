@@ -16,7 +16,7 @@
     "default_title": "Navigate Me",
     "default_popup": "popup.html"
   },
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "activeTab", "tabs"],
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
